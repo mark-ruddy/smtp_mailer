@@ -1,9 +1,9 @@
 import smtplib
-from email.mime.multipart import MIMEMultipart # Creating email messages
-from email.mime.text import MIMEText           # Creating email body text
-from email.utils import formataddr             # Formatting email headers
-from email.mime.base import MIMEBase           # Handling email attachments
-from email import encoders                     # Encoding email attachments
+from email.mime.multipart import MIMEMultipart 
+from email.mime.text import MIMEText           
+from email.utils import formataddr            
+from email.mime.base import MIMEBase         
+from email import encoders 
 
 import config
 
@@ -11,9 +11,9 @@ import config
 smtp_client = smtplib.SMTP(config.smtp_addr, config.smtp_port)
 # smtp_client.set_debuglevel(True) # Uncomment for verbose logging in console
 
-smtp_client.ehlo() # Extended Hello to SMTP server, client identifies itself to initiate conversation
-smtp_client.starttls() # The connection now uses TLS encryption
-smtp_client.ehlo() # We introduce ourselves to the server again under TLS
+smtp_client.ehlo() 
+smtp_client.starttls() 
+smtp_client.ehlo() 
 
 # Grab our username and password from config.py
 username = list(config.senders.keys())[config.which_sender_to_use]
@@ -27,13 +27,13 @@ def makeEmailMessage(receiver_name, receiver, subject, attachments=None, extra='
 
 {extra}"""
     msg = MIMEMultipart() # Use MIME standard for email formatting
-    msg['From'] = username # Email address used for login
-    msg['To'] = formataddr((receiver_name, receiver)) # Actual name of receiver will show instead of email address
+    msg['From'] = username 
+    msg['To'] = formataddr((receiver_name, receiver)) 
     msg['Subject'] = subject
     body = MIMEText(body)
-    msg.attach(body) # This does not "attach" the body text as a file, it is added to the text content of email
-
-    # Handle case of no attachments
+    # This does not "attach" the body text as a file, it is added to the text content of email
+    msg.attach(body)
+ 
     if attachments is None:
         attachments = []
 
@@ -46,7 +46,7 @@ def makeEmailMessage(receiver_name, receiver, subject, attachments=None, extra='
         encoders.encode_base64(email_file)
 
         email_file.add_header('Content-Disposition', 'attachment', filename=file)
-        msg.attach(email_file) # The processed file is now added to the email
+        msg.attach(email_file) 
 
     return msg
 
@@ -60,3 +60,4 @@ for receiver in config.receivers:
     smtp_client.send_message(msg, username, receiver)
     print(f'{iteration}: email sent to {receiver} from {username}')
     iteration += 1
+

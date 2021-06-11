@@ -18,3 +18,4 @@ receivers = {                     # The List of recipients, mail will go to each
     'john@gmail.com':'John Smith',
     'sparrow1828@outlook.com':'Captain Jack Sparrow',
 }
+
