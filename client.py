@@ -53,5 +53,5 @@ def makeEmailMessage(receiver_name, receiver_email, subject, attachments=None, e
 for i, (receiver_email, receiver_name) in enumerate(config.receivers):
     msg = makeEmailMessage(receiver_name, receiver_email, config.subject, config.attachments, config.generateMsg(i))
     smtp_client.send_message(msg, username, receiver_email)
-    print(f'{i}: email sent to {receiver} from {username}')
+    print(f'{i}: email sent to {receiver_email} from {username}')
 
