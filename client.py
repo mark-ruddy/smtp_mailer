@@ -21,14 +21,14 @@ password = config.senders[username]
 
 smtp_client.login(username, password) # Attempt to login to our email account
 
-def makeEmailMessage(receiver_name, receiver, subject, attachments=None, extra=''):
+def makeEmailMessage(receiver_name, receiver_email, subject, attachments=None, extra=''):
     # Make body using f-string, extra is an optional parameter to include text in body.
     body = f"""Hi {receiver_name},
 
 {extra}"""
     msg = MIMEMultipart() # Use MIME standard for email formatting
     msg['From'] = username 
-    msg['To'] = formataddr((receiver_name, receiver)) 
+    msg['To'] = formataddr((receiver_name, receiver_email)) 
     msg['Subject'] = subject
     body = MIMEText(body)
     # This does not "attach" the body text as a file, it is added to the text content of email
@@ -50,14 +50,8 @@ def makeEmailMessage(receiver_name, receiver, subject, attachments=None, extra='
 
     return msg
 
-def genNuclearLaunchCodes(n): # Example of function which isn't purely static
-    return ("6E 75 6B 65 21" * n)
-
-
-iteration = 1
-for receiver in config.receivers:
-    msg = makeEmailMessage(config.receivers[receiver], receiver, 'SUBJECT HERE', config.attachments, genNuclearLaunchCodes(iteration))
-    smtp_client.send_message(msg, username, receiver)
-    print(f'{iteration}: email sent to {receiver} from {username}')
-    iteration += 1
+for i, (receiver_email, receiver_name) in enumerate(config.receivers):
+    msg = makeEmailMessage(receiver_name, receiver_email, config.subject, config.attachments, config.generateMsg(i))
+    smtp_client.send_message(msg, username, receiver_email)
+    print(f'{i}: email sent to {receiver} from {username}')
 

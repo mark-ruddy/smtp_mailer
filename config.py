@@ -19,3 +19,10 @@ receivers = {                     # The List of recipients, mail will go to each
     'sparrow1828@outlook.com':'Captain Jack Sparrow',
 }
 
+subject = 'Change subject here'
+
+# generateMsg should return the text content of the email
+# by default i is passed as the iteration of how many emails are sent
+def generateMsg(i):
+    return f'I have sent {i+1} messages'
+
